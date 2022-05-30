@@ -288,7 +288,83 @@ int main () {
   // *v1:{1,2,3,4,5}; *v2:{1,2,3,4,5};
   ```
 
-* 
+
+#### initialize
+
+```cpp
+/*1. Initializing by pushing values one by one :*/
+// Create an empty vector
+    vector<int> vect;
+  
+    vect.push_back(10);
+    vect.push_back(20);
+    vect.push_back(30);
+  
+    for (int x : vect)
+        cout << x << " ";
+
+// 10 20 30
+
+/*2. Specifying size and initializing all values :*/
+
+    int n = 3;
+  
+    // Create a vector of size n with
+    // all values as 10.
+    vector<int> vect(n, 10);
+  
+    for (int x : vect)
+        cout << x << " ";
+
+//10 10 10
+
+/*3. Initializing like arrays :*/
+
+// CPP program to initialize a vector like
+// an array.
+    vector<int> vect{ 10, 20, 30 };
+  
+    for (int x : vect)
+        cout << x << " ";
+
+//10 20 30
+
+/*4. Initializing from an array :*/
+// CPP program to initialize a vector from
+// an array.
+    int arr[] = { 10, 20, 30 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+  
+    vector<int> vect(arr, arr + n);
+  
+    for (int x : vect)
+        cout << x << " ";
+
+//10 20 30
+
+/*5. Initializing from another vector :*/
+
+// CPP program to initialize a vector from  another vector.
+    vector<int> vect1{ 10, 20, 30 };
+  
+    vector<int> vect2(vect1.begin(), vect1.end());
+  
+    for (int x : vect2)
+        cout << x << " ";
+
+//10 20 30
+
+/*6. Initializing all elements with a particular value : */
+    vector<int> vect1(10); //reserve space for 
+    int value = 5;
+    fill(vect1.begin(), vect1.end(), value);
+    for (int x : vect1)
+        cout << x << " ";
+
+// 5 5 5 5 5 5 5 5 5 5
+```
+
+
 
 
 
@@ -679,4 +755,6 @@ int main () {
   return 0;
 }
 ```
+
+## sstream
 

@@ -1813,3 +1813,162 @@ class Solution {
 }
 ```
 
+## 232. Implement Queue using Stacks
+
+* Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (`push`, `peek`, `pop`, and `empty`).
+
+  Implement the `MyQueue` class:
+
+  - `void push(int x)` Pushes element x to the back of the queue.
+  - `int pop()` Removes the element from the front of the queue and returns it.
+  - `int peek()` Returns the element at the front of the queue.
+  - `boolean empty()` Returns `true` if the queue is empty, `false` otherwise.
+
+* first attempt
+
+* ```cpp
+  class MyQueue {
+    private:  
+      stack<int> s1; 
+      stack<int> s2; 
+    public:
+        MyQueue() {
+            
+        }
+        
+        void push(int x) {
+            s1.push(x);
+        }
+        
+        int pop() {
+          while(!s1.empty()){
+            s2.push(s1.top());
+            s1.pop(); 
+          }
+          int x = s2.top();
+          s2.pop();
+          while(!s2.empty()){
+            s1.push(s2.top());
+            s2.pop(); 
+          }
+          return x; 
+        }
+        
+        int peek() {
+          while(!s1.empty()){
+            s2.push(s1.top());
+            s1.pop(); 
+          }
+          int x = s2.top();
+          //s2.pop();
+          while(!s2.empty()){
+            s1.push(s2.top());
+            s2.pop(); 
+          }
+          return x; 
+        }
+        
+        bool empty() {
+          return s1.size() == 0; 
+        }
+  };
+  ```
+
+* ```cpp
+  // smart solution 
+  
+  class MyQueue {
+    stack<int> s1; 
+    stack<int> s2; 
+  public:
+      MyQueue() {
+          
+      }
+      
+      void push(int x) {
+          if(s1.size() == 0){
+            s1.push(x); 
+            return; 
+          }
+  
+          while(!s1.empty()){
+            s2.push(s1.top());
+            s1.pop(); 
+          }
+          s1.push(x); 
+          
+          while(!s2.empty()){
+            s1.push(s2.top());
+            s2.pop(); 
+          }
+  
+      }
+      
+      int pop() {
+          int x = s1.top();
+          s1.pop();
+          return x; 
+      }
+      
+      int peek() {
+          return s1.top(); 
+      }
+      
+      bool empty() {
+          return s1.size() == 0; 
+      }
+  };
+  ```
+
+## 225. Implement  stack using queues
+
+* Implement a last-in-first-out (LIFO) stack using only two queues. The implemented stack should support all the functions of a normal stack (`push`, `top`, `pop`, and `empty`).
+
+  Implement the `MyStack` class:
+
+  - `void push(int x)` Pushes element x to the top of the stack.
+  - `int pop()` Removes the element on the top of the stack and returns it.
+  - `int top()` Returns the element on the top of the stack.
+  - `boolean empty()` Returns `true` if the stack is empty, `false` otherwise.
+
+* ```cpp
+  class MyStack {
+      queue<int> q1; 
+  public:
+      MyStack() {
+          
+      }
+      
+      void push(int x) {
+        if(q1.empty()){
+          q1.push(x);
+          return; 
+        }
+  
+        q1.push(x); 
+        int Qsize = q1.size() -1; 
+        for(int i = 0; i <Qsize;i++){
+          int x = q1.front(); q1.pop();
+          q1.push(x); 
+        }
+  
+      }
+      
+      int pop() {
+          int x = q1.front(); 
+          q1.pop(); 
+          return x; 
+      }
+      
+      int top() {
+         return q1.front(); 
+      }
+      
+      bool empty() {
+          return q1.size() == 0; 
+      }
+  };
+  
+  ```
+
+* 
