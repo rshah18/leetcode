@@ -758,3 +758,153 @@ int main () {
 
 ## sstream
 
+
+
+
+
+
+
+
+
+
+
+# matrix 
+
+#### breadth first traversal matrix 
+
+```cpp
+void bfsMatrix(vector<vector<int>> mat){
+  vector<vector<bool>> visited(mat.size(), vector<bool>(mat[0].size(), false)); 
+
+  queue<pair<int,int>> q; 
+
+  q.push(make_pair(0,0)); 
+
+  while(!q.empty()){
+    pair<int, int> a = q.front(); q.pop(); 
+
+    if(a.first < 0 || a.first >= mat.size() || a.second < 0 || a.second >= mat[a.first].size()){
+      continue;
+    }
+
+    if(visited[a.first][a.second]) {
+      continue;
+    }
+
+    cout << a.first << " " << a.second << ": "<< mat[a.first][a.second] << endl;
+    visited[a.first][a.second] = true; 
+
+    q.push(make_pair(a.first, a.second-1));  // left 
+    q.push(make_pair(a.first, a.second+1));  // right 
+    q.push(make_pair(a.first - 1, a.second));  // top 
+    q.push(make_pair(a.first + 1, a.second));  // bottom 
+
+  }
+
+}
+```
+
+### depth first traversal
+
+```cpp
+void dfsMatrix(vector<vector<int>> mat){
+  
+  vector<vector<bool>> visited(mat.size(), vector<bool>(mat[0].size(), false)); 
+
+  stack<pair<int,int>> s; 
+
+  s.push(make_pair(0,0)); 
+
+  while(!s.empty()){
+    pair<int, int> a = s.top(); s.pop(); 
+
+    
+    if(a.first < 0 || a.first >= mat.size() || a.second < 0 || a.second >= mat[a.first].size()){
+      continue;
+    }
+
+    if(visited[a.first][a.second]) {
+      continue;
+    }
+
+    cout << a.first << " " << a.second << ": "<< mat[a.first][a.second] << endl;
+    visited[a.first][a.second] = true;
+
+    s.push(make_pair(a.first, a.second-1));  // left 
+    s.push(make_pair(a.first, a.second+1));  // right 
+    s.push(make_pair(a.first - 1, a.second));  // top 
+    s.push(make_pair(a.first + 1, a.second));  // bottom 
+
+  }
+
+}
+```
+
+
+
+* The only difference is using a stack or using a queue 
+* 
+
+
+
+
+
+## Operator overloading
+
+```cpp
+      // overloaded prefix ++ operator
+      Time operator++ () {
+         ++minutes;          // increment this object
+         if(minutes >= 60) {
+            ++hours;
+            minutes -= 60;
+         }
+         return Time(hours, minutes);
+      }
+      
+      // overloaded postfix ++ operator
+      Time operator++( int ) {
+      
+         // save the orignal value
+         Time T(hours, minutes);
+         
+         // increment this object
+         ++minutes;                    
+         
+         if(minutes >= 60) {
+            ++hours;
+            minutes -= 60;
+         }
+          
+         // Overload + operator to add two Box objects.
+   Box operator+(const Box& b) {
+      Box box;
+      box.length = this->length + b.length;
+      box.breadth = this->breadth + b.breadth;
+      box.height = this->height + b.height;
+      return box;
+   }
+          
+         // overloaded minus (-) operator
+      Distance operator- () {
+         feet = -feet;
+         inches = -inches;
+         return Distance(feet, inches);
+      }
+          
+      void operator = (const Distance &D ) { 
+         feet = D.feet;
+         inches = D.inches;
+      }
+          
+      int &operator[](int i) {
+         if( i > SIZE ) {
+            cout << "Index out of bounds" <<endl; 
+            // return first element.
+            return arr[0];
+         }
+         
+         return arr[i];
+      }
+```
+

@@ -747,3 +747,101 @@ public:
 // 6 
 ```
 
+## 617. Merge Two Binary Trees
+
+* You are given two binary trees `root1` and `root2`.
+
+  Imagine that when you put one of them to cover the other, some nodes of the two trees are overlapped while the others are not. You need to merge the two trees into a new binary tree. The merge rule is that if two nodes overlap, then sum node values up as the new value of the merged node. Otherwise, the NOT null node will be used as the node of the new tree.
+
+  Return *the merged tree*.
+
+  **Note:** The merging process must start from the root nodes of both trees.
+
+ ```cpp
+ class Solution {
+ public:
+     TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2) {
+       if(root1 == nullptr){
+         return root2;
+       }
+ 
+       if(root2 == nullptr){
+         return root1;
+       }
+ 
+       root1->val += root2->val;
+ 
+       root1->left = mergeTrees(root1->left, root2->left);
+       root1->right = mergeTrees(root1->right, root2->right);
+ 
+       return root1; 
+         
+     }
+ };
+ 
+ ```
+
+## 116. Populating Next Right Pointers in Each Node
+
+* A perfect binary tree is **a type of binary tree in which every internal node has exactly two child nodes and all the leaf nodes are at the same level**. 
+* Perfect Binary Tree. All the internal nodes have a degree of 2.
+
+```cpp
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        queue<Node *> q; 
+        q.push(root);
+
+        if(root == NULL)
+        return root; 
+
+        while(!q.empty()){
+          int Qsize = q.size(); 
+          Node * prev = NULL; 
+          for(int i = 0; i < Qsize; i++){
+
+            Node * current = q.front(); q.pop(); 
+
+            if(current->left != NULL){
+              q.push(current->left); 
+            }
+
+            if(current->right != NULL){
+              q.push(current->right); 
+            }
+
+            if(prev != NULL){
+              prev->next = current; 
+            } 
+            prev = current; 
+            
+          }
+        }
+        return root; 
+    }
+};
+```
+
+## 542. 01 Matrix
+
+Given an `m x n` binary matrix `mat`, return *the distance of the nearest* `0` *for each cell*.
+
+The distance between two adjacent cells is `1`.
+
