@@ -731,6 +731,67 @@ int main()
 }
 ```
 
+#### push_back
+
+* Only adds a character to the back
+
+#### append 
+
+* adds string to the back 
+
+* ```cpp
+  string& string::append (const string& str)
+  ```
+
+*  Appends at most, str_num characters of string str, starting with index str_idx
+
+* ```cpp
+  string& string::append (const string& str, size_type str_idx, size_type str_num)
+  ```
+
+* Appends num occurrences of character c
+
+* ```cpp
+  string& string::append (size_type num, char c)
+  ```
+
+* 
+
+#### insert
+
+* **insert()** is used to insert characters in string at specified position. 
+
+* ```cpp
+  string& string::insert (size_type idx, const string& str)
+      
+  s.insert(5,"hello");  // strinhellog
+  ```
+
+* Inserts at most, str_num characters of str, starting with index str_idx.
+
+* ```cpp
+  string& string::insert (size_type idx, const string& str, size_type str_idx, size_type str_num)
+  ```
+
+* Inserts num occurrences of character c at the position specified by idx.
+
+* ```cpp
+  // Only character not string 
+  
+  string& string ::insert (size_type idx, size_type num, char c)
+      
+         s.insert(5,5,'h'); //strinhhhhhg
+  str.insert(str.begin() + 5, 5, '$');
+  ```
+
+*  Inserts all characters of the range [ beg,end ) before the character to which iterator pos refers.
+
+* ```cpp
+  void string ::insert (iterator pos, InputIterator beg, InputIterator end )
+  ```
+
+  
+
 ## pair
 
 ```cpp
