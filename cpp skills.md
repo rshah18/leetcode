@@ -908,3 +908,30 @@ void dfsMatrix(vector<vector<int>> mat){
       }
 ```
 
+## chaining function
+
+```cpp
+class foo
+{
+  private:
+    int x;
+    int y;
+  public:
+    foo& setx(int x_)
+    {   x = x_;
+        return *this; }
+    foo& sety(int y_)
+    {   y = y_;
+        return *this; }
+    foo& print()
+    {std::cout << x << ' ' << y;
+     return *this;}
+};
+
+int main()
+{
+    foo bar;
+    bar.setx(1).sety(2).print();
+}
+```
+
