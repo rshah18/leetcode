@@ -71,3 +71,57 @@ void selectionSort(vector<int> &v){
 * first pass searches for smallest item in the whole list and  puts it at index 0
 * and then second pass searches through from index 1 to end-1 and puts it at index 1
 * so on. 
+
+
+
+#### quick sort
+
+* Pivot
+  * Correct position in final, sorted array
+  * Items to the left are smaller
+  * Items to the right are larger
+* choosing pivot
+  * we want to pick a pivot that divides in half or close to it. 
+
+```cpp
+int partition(vector<int> &v, int left, int right, int pivotIndex){
+  while(left <= right){
+    while(v[left] < v[pivotIndex]){
+      left++;
+    }
+
+    while(v[right] > v[pivotIndex]){
+      right--;
+    }
+
+    if(left <= right){
+      swap(v[left], v[right]);
+      left++;
+      right--;
+    }
+
+  }
+  return left;
+}
+
+void quickSort(vector<int> &v, int left, int right){
+
+    if(left >= right){
+      return;
+    }
+
+    // pick a pivot index 
+    int pivotIndex = (left+right)/2;
+
+    // partition the array around the pivot
+    int index = partition(v, left, right, pivotIndex);
+    
+    quickSort(v, left, index-1);
+    quickSort(v, index, right);
+
+}
+```
+
+#### merge sort
+
+* 
