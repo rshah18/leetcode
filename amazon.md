@@ -66,3 +66,76 @@ public:
 - Space complexity : O(1)*O*(1).
 
   The amount of memory used does not change with the size of the input integer, and is therefore constant.
+
+## 49. Group anagram
+
+Given an array of strings `strs`, group **the anagrams** together. You can return the answer in **any order**.
+
+An **Anagram** is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+**Example 1:**
+
+```
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+```
+
+```cpp
+// my approach  104 / 117 test cases passed.
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+      unordered_map<unsigned int, vector<string>> table;
+      vector<vector<string>> strv;
+
+      for(int i = 0; i < strs.size(); i++){
+        int ascii_sum = 0;
+        for(auto s: strs[i]){
+          unsigned int val = int(s);
+          ascii_sum += (val*val);
+        }
+        cout << ascii_sum << " " << strs[i] << endl;
+        table[ascii_sum].push_back(strs[i]);
+      }
+
+      for(auto m: table){
+        strv.push_back(m.second);
+      }
+
+      return strv;
+
+    }
+};
+
+```
+
+```cpp
+int(character) // provides ascii value 
+```
+
+```cpp
+// instead of taking a sum just sort the words and take those values 
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+      unordered_map<string, vector<string>> table;
+      vector<vector<string>> strv;
+
+      for(int i = 0; i < strs.size(); i++){
+        string temp = strs[i]; 
+        sort(temp.begin(), temp.end()); 
+        
+        table[temp].push_back(strs[i]);
+      }
+
+      for(auto m: table){
+        strv.push_back(m.second);
+      }
+
+      return strv;
+
+    }
+};
+```
+
