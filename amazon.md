@@ -139,3 +139,98 @@ public:
 };
 ```
 
+## 696. Count Binary Substrings
+
+* Given a binary string `s`, return the number of non-empty substrings that have the same number of `0`'s and `1`'s, and all the `0`'s and all the `1`'s in these substrings are grouped consecutively.
+
+  Substrings that occur multiple times are counted the number of times they occur.
+
+   
+
+  **Example 1:**
+
+  ```
+  Input: s = "00110011"
+  Output: 6
+  Explanation: There are 6 substrings that have equal number of consecutive 1's and 0's: "0011", "01", "1100", "10", "0011", and "01".
+  Notice that some of these substrings repeat and are counted the number of times they occur.
+  Also, "00110011" is not a valid substring because all the 0's (and 1's) are not grouped together.
+  ```
+
+* ```cpp
+  // brute force 
+  class Solution {
+  public:
+      int count = 0;
+  
+      void subString(string s, int start, int end){
+        if(end  == s.size()){
+          return;
+        }
+        if(start > end){
+          subString(s, 0, end+1);
+        }
+        else if(start <= end){
+          map<char, int> table;
+          vector<char> vc;
+          for(int i = start; i <= end; i++){
+            cout << s[i] << " ";
+            table[s[i]]++;
+            vc.push_back(s[i]);
+          }
+          cout << endl;
+            
+          bool s1 = is_sorted(vc.begin(), vc.end()); // acending 
+          bool s2 = is_sorted(vc.rbegin(), vc.rend()); // descending 
+          
+          if(table['0'] == table['1'] && (s1||s2)){
+            cout<< " yes" << endl;
+            count++; 
+          }
+          subString(s, start+1, end);
+        }
+      }
+  
+      int countBinarySubstrings(string s) {
+  
+  
+        subString(s, 0, 0);
+  
+  
+        return count;
+  
+  
+  
+      }
+  };
+  ```
+
+* ```cpp
+  // not workable s
+  class Solution {
+  public:
+      int countBinarySubstrings(string s) {
+          vector<int> sb;
+          int count = 1;
+          for(int i = 0; i < s.size(); i++){
+            if(s[i-1] == s[i] ){
+              count++;
+            }
+            else {
+              sb.push_back(count);
+              count = 1; 
+            }
+          }
+  
+          int ans  = 0; 
+          for(int i = 1; i < sb.size(); i++){
+             ans += min(sb[i-1], sb[i]); 
+          }
+          return ans; 
+          
+      }
+  };
+  
+  ```
+
+* 

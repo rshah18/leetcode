@@ -235,7 +235,36 @@ int main () {
 }
 ```
 
+#### all_of
 
+* Returns `true` if pred returns `true` for all the elements in the range `[first,last)` or if the range is empty, and `false` otherwise.
+
+* Parameters
+
+  - first, last
+
+    [Input iterators](https://www.cplusplus.com/InputIterator) to the initial and final positions in a sequence. The range used is `[first,last)`, which contains all the elements between first and last, including the element pointed by first but not the element pointed by last.
+
+  - pred
+
+    Unary function that accepts an element in the range as argument and returns a value convertible to `bool`. The value returned indicates whether the element fulfills the condition checked by this function. The function shall not modify its argument. This can either be a function pointer or a function object.
+
+* ```cpp
+  #include <iostream>     // std::cout
+  #include <algorithm>    // std::all_of
+  #include <array>        // std::array
+  
+  int main () {
+    std::array<int,8> foo = {3,5,7,11,13,17,19,23};
+  
+    if ( std::all_of(foo.begin(), foo.end(), [](int i){return i%2;}) )
+      std::cout << "All the elements are odd numbers.\n";
+  
+    return 0;
+  }
+  ```
+
+* 
 
 
 
