@@ -1093,16 +1093,21 @@ public:
         return v;
       }
 
-      s.push(root);
+      s.push(root); // push only for preorder 
 
       while(!s.empty()){
           TreeNode * node = s.top();
           s.pop(); 
+          
+          // 1. visit the node first 
           v.push_back(node->val);
+          
+         // 3. visit the right node 
           if(node->right != nullptr){
             s.push(node->right);
           }
-
+		
+          // 2. visit the left node 
           if(node->left != nullptr){
             s.push(node->left);
           }
@@ -1143,14 +1148,18 @@ public:
       TreeNode * current = root; 
 
       while(current != nullptr || !s.empty()){
+        //1. go to the left innermost node, push all left nodes to stack 
         while(current != nullptr){
           s.push(current);
           current = current->left; 
         }
-
+		
+        // 2. visit the node. 
         current = s.top();
         s.pop(); 
-        v.push_back(current->val); 
+        v.push_back(current->val);
+          
+        // 3. visit its right node 
         current = current->right; 
       }
 
@@ -1173,12 +1182,14 @@ public:
         TreeNode * previous = nullptr; 
 
         while(current != nullptr || !s.empty()){
+          // 1. push one left 
           if(current != nullptr){
             s.push(current);
             current = current->left;
           }
 
           else {
+              
             current = s.top();
             if(current->right == nullptr || current->right == previous){
               v.push_back(current->val);
@@ -1971,4 +1982,25 @@ class Solution {
   
   ```
 
-* 
+## 217. contains duplicate
+
+```cpp
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_map<int,int> table;
+        for(auto a: nums){
+          table[a]++;
+        }
+
+        for(auto m:table){
+          if(m.second >1){
+            return true;
+          } // if
+        }
+
+        return false; 
+    }// function
+};
+```
+
