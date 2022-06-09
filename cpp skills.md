@@ -819,7 +819,27 @@ int main()
   void string ::insert (iterator pos, InputIterator beg, InputIterator end )
   ```
 
-  
+
+
+
+## stringstream
+
+#### split
+
+```cpp
+#include <iostream>
+#include <sstream>
+
+std::string input = "abc,def,ghi";
+std::istringstream ss(input);
+std::string token;
+
+while(std::getline(ss, token, ',')) {
+    std::cout << token << '\n';
+}
+```
+
+
 
 ## pair
 
