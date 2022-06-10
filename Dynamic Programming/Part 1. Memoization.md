@@ -46,7 +46,7 @@ void dib(int n){
 ```
 
 * Height is the distance between the root node and the furthest leaf node
-* At every level we are calling the functions doubling the number of function calls 
+* At every level we are calling the functions twice doubling the number of function calls 
 * for `n` levels our time complexity becomes `O(2^n)`
 
 <img src="C:\ravi\LeetCode\img\dp3.6.7.png" alt="dp3.6.7" style="zoom:80%;" />
@@ -192,8 +192,6 @@ const gridTraveller = (m,n) =>{
 }
 ```
 
-
-
 #### Making improvements to counting number of ways we can reduce the recursive 
 
 * We can notice there are duplicate subtrees
@@ -209,7 +207,6 @@ const gridTraveller = (m,n) =>{
 
 * We take the exact return recursive statement and assign it to the  `memo[key]`
 * and return that value based key 
-* 
 
 #### Solution
 
@@ -271,9 +268,278 @@ int gridTraveller(int n, int m){
 
 ```
 
+#### Space and Time complexity
+
+* For a case of `gridTraveler(4,3)`
+  * `m: {0,1,2,3,4}`
+  * `n: {0,1,2,3}`
+* Total number of nodes possible `m*n`
+* Memoized version has time and space complexity of 
+  * Time : `O(m*n)`
+  * Space: `O(n+m)`
+
+### Memoization Recipe
+
+#### Two Step process
+
+1. **Make it work** 
+   1. *Visualize the problem as a tree*
+   2. *Implement the tree using recursion (brute force)*
+   3. *Test it (should give correct results, it may be slow)*
+2. **Make it efficient** 
+   1. *Add a memo object (key represent argument to the function, values represent return values), it must be shared among all recursive calls*
+   2. *Add a base case to return memo values* 
+   3. *Store return values into the memo* 
+
+#### Don't try to implement an efficient algorithm from get go. Get a brute force working solution using recursion then implement using memoization. 
+
+* first look for correctness in your solution it could be brute force or anything. As long as it can get you correct results 
+* Then once that is achieved then try to optimize it.
+* Leaves of the tree are the base cases 
+
+## canSum
+
+* Write a function `canSum(targetSum, numbers)` that takes in a targetSum and an array of numbers as an arguments.
+* The function should return a boolean indicating whether or not it is possible to generate the targetsum using numbers from the array
+* You can use an element of the array as many times as needed
+* You may assume that all input numbers are nonnegative 
+
+```cpp
+bool canSum(int target, vector<int> & v){
+    cout << "canSum(" << target << ")" << endl; 
+    if(target == 0){
+        return true; 
+    } 
+
+    if(target < 0){
+        return false; 
+    }
+
+    for(auto a: v){
+        int remainder = target -a; 
+        if(canSum(remainder, v)){
+            return true; 
+        } 
+    }
+    
+    return false; 
+}
+```
+
+```js
+const canSum(targetSum, numbers){
+    if(targetSum === 0) return true; 
+    if(targetSum < 0 ) return false; 
+    
+    for(let num of numbers){
+        const remainder = targetSum - num; 
+        if(canSum(remainder, numbers) === true){
+            return true; 
+        }
+    }
+    
+    return false; 
+} 
+```
 
 
 
 
-* 
+
+#### Time and space complexity of brute force
+
+<img src="C:\ravi\LeetCode\img\dp20.png" alt="dp20" style="zoom:60%;" />
+
+* Two factors determine the size of the tree
+  * `m` = target sum
+  * `n` = array length
+* Height of tree
+  * Even if we subtract 1 at every step to reach the target sum the maximum height would be targetsum
+  * `m` is the height of the tree
+* Branches
+  * The maximum branching factor is the number of elements in the array: `n`
+
+<img src="C:\ravi\LeetCode\img\dp21.png" alt="dp21" style="zoom:70%;" />
+
+* The time complexity becomes `O(n^m)`
+* Space used will be maximum height of the tree `O(m)`
+
+#### Memoized solution
+
+```cpp
+bool canSum(int target, vector<int> & v){
+    
+    static unordered_map<int,bool> memo; 
+
+    unordered_map<int, bool>::iterator it = memo.find(target); 
+
+    if(it == memo.end()){
+        return memo[target]; 
+    }
+    
+    if(target == 0){
+        return true; 
+    } 
+
+    if(target < 0){
+        return false; 
+    }
+
+    for(auto a: v){
+        int remainder = target -a; 
+        memo[remainder] = canSum(remainder, v);
+        if(memo[remainder]){
+            return true; 
+        } 
+    }
+    
+    memo[target] = false; 
+    return false; 
+}
+```
+
+```js
+const canSum = (target, numbers) =>{
+    if(target == 0) return true;
+    if(target < 0) return false; 
+
+    for( let num of numbers){
+        const remainder = target - num; 
+        if(canSum(remainder, numbers) === true){
+            return true; 
+        }
+    }
+
+    return false; 
+}
+```
+
+```js
+const canSum = (target, numbers, memo = {}) =>{
+
+    if(target in memo) return memo[target]; 
+
+    if(target == 0) return true;
+    if(target < 0) return false; 
+    
+    for( let num of numbers){
+        const remainder = target - num; 
+        memo[remainder] = canSum(remainder, numbers, memo); 
+        
+        if(memo[remainder]){
+            return true; 
+        }
+        
+    }
+
+    memo[target] = false; 
+    return memo[target]; 
+}
+```
+
+#### Time and space complexity of memoized solution
+
+* `m` the target sum is the height of the array 
+* `n` the size of the array determines the branches 
+* Time complexity if `O(n*m)` 
+  * We still need to branch `n` times to collect the values for the memo object
+* Space complexity is height `O(m)`
+
+
+
+## howSum(targetSum, numbers)
+
+* Write a function `howSum(targetSum, numbers)` that takes in a targetsum and an array of numbers as arguments
+* The function should return an array containing any combination of elements that add up to exactly the targetSum. 
+* If there is no combination that adds up to the targetSum, then return null. 
+* We can return as soon as we find a combination 
+* Example 
+  * a
+    * `howSum(8, [2,3,5]) -> [2,2,2,2]`
+    * `howSum(8, [2,3,5]) -> [3,5]`
+  * b
+    * `howSum(7, [2,4]) -> null`
+  * c
+    * `howSum(0, [1,2,3])-> []`
+*  <img src="C:\ravi\LeetCode\img\dp22.png" alt="dp22" style="zoom:60%;" />
+
+#### Recursive solution
+
+```js
+
+const howSum = (target, numbers) =>{
+
+    if(target === 0){
+        return []; 
+    }
+
+    if(target < 0){
+        return null; 
+    }
+
+    for(let c of numbers){
+        const remainder = target - c; 
+        const result = howSum(remainder, numbers); 
+        if(result !== null){
+            return [ ...result, c]; 
+        }
+    }
+
+    return null; 
+
+}
+
+console.log(howSum(7, [2,3])); 
+```
+
+```cpp
+// c++ 17 and ownwards
+// g++ -std=c++17 index.cpp -o index 
+#include <iostream>
+#include <unordered_map>
+#include <algorithm>
+#include <vector>
+#include <utility>
+#include <string>
+#include <optional>
+
+using namespace std; 
+
+ 
+optional<vector<int>> howSum(int sum, vector<int> &v){
+    if(sum < 0){
+        return nullopt; 
+    }
+    
+    if(sum == 0){
+        return vector<int>(); 
+    }
+
+    for(auto a: v){
+        int remainder = sum -a; 
+        optional<vector<int>> result = howSum(remainder, v); 
+        if(result.has_value()){
+            result->push_back(a); 
+            return *result; 
+        }
+    }
+
+    return nullopt; 
+
+}
+
+
+int main(){
+
+    vector<int> v = {2, 3}; 
+
+    optional<vector<int>> v2 = howSum(7, v);
+    if(v2.has_value()){
+        for(auto a: *v2){
+            cout << a;
+        }
+    } 
+    return 0; 
+}
+```
 
