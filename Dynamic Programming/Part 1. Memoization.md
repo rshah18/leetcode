@@ -543,3 +543,315 @@ int main(){
 }
 ```
 
+* You can use `optional<vector<int>>` to either return a `vector<int>` or return a `nullopt` which represents a null value. 
+* `optional<vector<int>> v2` can be checked for if there is a value by using  `.has_value()`
+
+#### space and time complexity for howSum
+
+* `m` = target sum 
+* `n`  = length of vector 
+* `time` = `O(n^m *m)` 
+  * Target gum determines the height of the tree 
+  * vector length determine number of branches at  every height
+* Space complexity
+  * `m` is the number of max stack size at any point 
+  * space = `O(m)`
+
+#### memoized solution
+
+```js
+const howSum = (target, numbers, memo = {}) =>{
+
+    if(target in memo){
+        return memo[target]; 
+    }
+    
+    if(target === 0){
+        return []; 
+    }
+
+    if(target < 0){
+        return null; 
+    }
+
+    for(let c of numbers){
+        const remainder = target - c; 
+        const result = howSum(remainder, numbers, memo); 
+        if(result !== null){
+            memo[target] = [ ...result, c]; 
+            return memo[target]; 
+        }
+    }
+
+    memo[target] = null; 
+    return null; 
+}
+```
+
+```cpp
+ 
+optional<vector<int>> howSum(int sum, vector<int> &v){
+
+    static unordered_map<int, optional<vector<int>>> memo; 
+
+    auto it = memo.find(sum);
+
+    if(it != memo.end()){
+        return it->second; 
+    } 
+
+    if(sum < 0){
+        return nullopt; 
+    }
+    
+    if(sum == 0){
+        return vector<int>(); 
+    }
+
+    for(auto a: v){
+        int remainder = sum -a; 
+        optional<vector<int>> result = howSum(remainder, v); 
+        if(result.has_value()){
+            result->push_back(a); 
+            memo[sum] =  *result; 
+            return memo[sum]; 
+        }
+    }
+
+    memo[sum] = nullopt; 
+    return nullopt; 
+
+}
+
+
+int main(){
+
+    vector<int> v = {15, 2}; 
+
+    optional<vector<int>> v2 = howSum(3000, v);
+    if(v2.has_value()){
+        for(auto a: *v2){
+            cout << a << " ";
+        }
+    } 
+    return 0; 
+}
+```
+
+#### memoized version time and space
+
+* Time
+  * Tree height is `n`
+  * `m` is the vector size 
+  * copying the array with cost `m` 
+  * So total time is `O(n*m*m)`
+  * Time: `O(n*m^2)`
+* Space
+  * We must consider maximum number of recursive call at any point: `m`
+  * And all unique values of the memo. The maximum length is `m` 
+  * Space `O(m^2)` 
+
+## bestSum(targetSum, numbers)
+
+* Write a function `bestSum(targetSum, numbers)` that takes in a targetSum and an array of numbers as arguments.
+* The function should return an array containing the shortest combination of numbers that add up to exactly the targetSum
+* If there is a tie for the shortest combination, you may return any one of the shortest.
+* Eg
+  * `bestSum(7, [5,3,4,7])`
+    * `[3,4]`
+    * `[7]`  result 
+  * `bestSum(8, [2,3,5])`
+    * `[2,2,2,2]`
+    * `[2,3,2]`
+    * `[3,5]`
+  * <img src="C:\ravi\LeetCode\img\dp23.png" alt="dp23" style="zoom:80%;" />
+
+* #### Recursive solution
+
+```cpp
+const bestSum = (targetSum, numbers) =>{
+    if(targetSum === 0){
+        return [];
+    }
+
+    if(targetSum < 0){
+        return null;
+    }
+
+    let lastResult = null; 
+
+    for(let num of numbers){
+        let remainder = targetSum - num; 
+        
+        let result = bestSum(remainder, numbers);
+        if( result !== null){
+            let current = [...result, num]; 
+            if(lastResult === null || current.length < lastResult.length){
+                lastResult = current; 
+            }
+        }
+    }
+
+    return lastResult;  
+}
+```
+
+```cpp
+optional<vector<int>> bestSum(int targetSum, vector<int>& numbers){ 
+    if(targetSum == 0){
+      return vector<int>();  
+    }
+
+    if(targetSum < 0){
+      return nullopt; 
+    }
+
+    optional<vector<int>> minimumLength = {}; // nullopt 
+
+    for(auto a: numbers){
+
+      int remainder = targetSum -a; 
+
+      optional<vector<int>> result = bestSum(remainder, numbers);
+
+      if(result.has_value()){
+        result->push_back(a); 
+        if(minimumLength == nullopt || result->size() < minimumLength->size()){
+          // * minimumLength = * result; does not work   
+          minimumLength = result;  // only this works 
+        }
+      }
+    }
+
+    //printOpt(minimumLength); 
+    return minimumLength; 
+}
+
+```
+
+#### Time and space complexity 
+
+* Space
+  * height of tree is `m` targetsum
+  * for every recursive call we are making an array of size `m` 
+  * Space : `O(m)`
+* Time complexity 
+  * Height of tree is `m`
+  * Array size: `n`
+  * For every call we are iteration through an array of size `m` because it is the size of the array we are returning so if any number is 1 then we could have an array of just 1 `m` times
+  * `O(n^m * m)`
+
+#### Memoized solution
+
+```js
+const bestSum = (targetSum, numbers, memo = {}) =>{
+    
+    if(targetSum in memo){
+        return memo[targetSum]; 
+    }
+
+    if(targetSum === 0){
+        return [];
+    }
+
+    if(targetSum < 0){
+        return null;
+    }
+
+    let lastResult = null; 
+
+    for(let num of numbers){
+        let remainder = targetSum - num; 
+        
+        let result = bestSum(remainder, numbers, memo);
+        if( result !== null){
+            let current = [...result, num]; 
+            if(lastResult === null || current.length < lastResult.length){
+                lastResult = current; 
+            }
+        }
+    }
+
+    memo[targetSum] = lastResult; 
+    return lastResult;  
+}
+
+console.log(bestSum(100, [1,2,5,25]));
+console.log(bestSum(7, [5, 3,4,7]));
+```
+
+```cpp
+optional<vector<int>> bestSum(int targetSum, vector<int>& numbers){ 
+
+    static unordered_map<int, optional<vector<int>>> memo; 
+
+    unordered_map<int, optional<vector<int>>>::iterator it = memo.find(targetSum); 
+
+    if(it != memo.end()){
+        return memo[targetSum]; 
+    }
+
+    if(targetSum == 0){
+      return vector<int>();  
+    }
+
+    if(targetSum < 0){
+      return nullopt; 
+    }
+
+    optional<vector<int>> minimumLength = {}; // nullopt 
+
+    for(auto a: numbers){
+
+      int remainder = targetSum -a; 
+
+      optional<vector<int>> result = bestSum(remainder, numbers);
+
+      if(result.has_value()){
+        result->push_back(a); 
+        if(minimumLength == nullopt || result->size() < minimumLength->size()){
+          // * minimumLength = * result; does not work   
+          minimumLength = result;  // only this works 
+        }
+      }
+    }
+
+    memo[targetSum] = minimumLength; 
+    return minimumLength; 
+}
+```
+
+#### Time and space complexity 
+
+* Time complexity `O(m*n)`
+* Complexity: `O(m^2 *n)`
+
+
+
+
+
+## canSum vs howSum vs bestSum
+
+* canSum  -> Decision Problem
+* howSum -> Combinatoric Problem
+* bestSum -> Optimation Problem
+
+
+
+## canConstruct
+
+* Write a function `canConstruct(target, wordBank)` that accepts a target string and an array of strings
+* The function should return a boolean indicating whether or not the `target` can be constructed by concatenating elements of the `wordBank` array
+* You may resuse element of `wordBank` as many times as needed
+* `canConstruct(abcdef, [ab, abc, cd, def, abcd]) -> true`
+  * `abc+def`
+* base case 
+  * `canConstruct('', [cat, dog, mouse]) ->true`
+*  Do Not take from the middle only from front or back
+* <img src="C:\ravi\LeetCode\img\canConstruct.png" alt="canConstruct" style="zoom:60%;" />
+
+* <img src="C:\ravi\LeetCode\img\canConstruct2.png" alt="canConstruct2" style="zoom:60%;" />
+
+* <img src="C:\ravi\LeetCode\img\skateboard.png" alt="skateboard" style="zoom:60%;" />
+
+* 
