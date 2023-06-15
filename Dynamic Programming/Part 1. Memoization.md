@@ -24,7 +24,9 @@ console.log(fib(7));
 
 <img src="C:\ravi\LeetCode\img\dp1.6.7.png" alt="dp1.6.7" style="zoom:80%;" />
 
-* Time complexity of fib function is `O(2^n)`
+* Time complexity of fib function is `O(2^n)` based on how many function calls total 
+* space complexity is how many stack levels we go deep at any point reaching the furthest in the branch to the root 
+* Call stack end at base cases for each branch 
 
 ## Time and space complexity of recursive function 
 
@@ -860,3 +862,7 @@ optional<vector<int>> bestSum(int targetSum, vector<int>& numbers){
 
 ```
 
+## Tabulation
+
+* o(n) for space : size of array n
+* o(n) for going through each value once in the 
